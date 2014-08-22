@@ -1789,42 +1789,48 @@ var CanvasGraphics = (function CanvasGraphicsClosure() {
 
       var imgToPaint;
       // instanceof HTMLElement does not work in jsdom node.js module
-      if (imgData instanceof HTMLElement || !imgData.data) {
+      // if (imgData instanceof HTMLElement || !imgData.data) {
         imgToPaint = imgData;
-      } else {
-        var tmpCanvas = CachedCanvases.getCanvas('inlineImage', width, height);
-        var tmpCtx = tmpCanvas.context;
-        putBinaryImageData(tmpCtx, imgData);
-        imgToPaint = tmpCanvas.canvas;
-      }
+      // } else {
+      //   var tmpCanvas = CachedCanvases.getCanvas('inlineImage', width, height);
+      //   var tmpCtx = tmpCanvas.context;
+      //   putBinaryImageData(tmpCtx, imgData);
+      //   imgToPaint = tmpCanvas.canvas;
+      // }
 
       var paintWidth = width, paintHeight = height;
       var tmpCanvasId = 'prescale1';
       // Vertial or horizontal scaling shall not be more than 2 to not loose the
       // pixels during drawImage operation, painting on the temporary canvas(es)
       // that are twice smaller in size
-      while ((widthScale > 2 && paintWidth > 1) ||
-             (heightScale > 2 && paintHeight > 1)) {
-        var newWidth = paintWidth, newHeight = paintHeight;
-        if (widthScale > 2 && paintWidth > 1) {
-          newWidth = Math.ceil(paintWidth / 2);
-          widthScale /= paintWidth / newWidth;
-        }
-        if (heightScale > 2 && paintHeight > 1) {
-          newHeight = Math.ceil(paintHeight / 2);
-          heightScale /= paintHeight / newHeight;
-        }
-        var tmpCanvas = CachedCanvases.getCanvas(tmpCanvasId,
-                                                 newWidth, newHeight);
-        tmpCtx = tmpCanvas.context;
-        tmpCtx.clearRect(0, 0, newWidth, newHeight);
-        tmpCtx.drawImage(imgToPaint, 0, 0, paintWidth, paintHeight,
-                                     0, 0, newWidth, newHeight);
-        imgToPaint = tmpCanvas.canvas;
-        paintWidth = newWidth;
-        paintHeight = newHeight;
-        tmpCanvasId = tmpCanvasId === 'prescale1' ? 'prescale2' : 'prescale1';
-      }
+
+      // TS: Disable this scaling stuff because it results in the production of
+      // canvas objects that aren't really valid
+      
+      // while ((widthScale > 2 && paintWidth > 1) ||
+      //        (heightScale > 2 && paintHeight > 1)) {
+      //   var newWidth = paintWidth, newHeight = paintHeight;
+      //   if (widthScale > 2 && paintWidth > 1) {
+      //     newWidth = Math.ceil(paintWidth / 2);
+      //     widthScale /= paintWidth / newWidth;
+      //   }
+      //   if (heightScale > 2 && paintHeight > 1) {
+      //     newHeight = Math.ceil(paintHeight / 2);
+      //     heightScale /= paintHeight / newHeight;
+      //   }
+      //   var tmpCanvas = CachedCanvases.getCanvas(tmpCanvasId,
+      //                                            newWidth, newHeight);
+      //   tmpCtx = tmpCanvas.context;
+      //   tmpCtx.clearRect(0, 0, newWidth, newHeight);
+      //   tmpCtx.drawImage(imgToPaint, 0, 0, paintWidth, paintHeight,
+      //                                0, 0, newWidth, newHeight);
+      //   imgToPaint = tmpCanvas.canvas;
+      //   paintWidth = newWidth;
+      //   paintHeight = newHeight;
+      //   tmpCanvasId = tmpCanvasId === 'prescale1' ? 'prescale2' : 'prescale1';
+      // }
+
+      console.log("drawImage from CanvasGraphics_paintInlineImageXObject");
       ctx.drawImage(imgToPaint, 0, 0, paintWidth, paintHeight,
                                 0, -height, width, height);
 

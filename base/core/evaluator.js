@@ -289,14 +289,15 @@ var PartialEvaluator = (function PartialEvaluatorClosure() {
       operatorList.addDependency(objId);
       var args = [objId, w, h];
 
-      if (!softMask && !mask && image instanceof JpegStream &&
-          image.isNativelySupported(this.xref, resources)) {
+      // Ignore masks and always do things this way
+      // if (!softMask && !mask && image instanceof JpegStream &&
+      //     image.isNativelySupported(this.xref, resources)) {
         // These JPEGs don't need any more processing so we can just send it.
         operatorList.addOp(OPS.paintJpegXObject, args);
         this.handler.send(
             'obj', [objId, this.pageIndex, 'JpegStream', image.getIR()]);
         return;
-      }
+      // }
 
 
       PDFImage.buildImage(function(imageObj) {
